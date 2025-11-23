@@ -9,20 +9,20 @@ interface Props {
 
 const LineSelector: React.FC<Props> = ({ onSelect, selectedRoute }) => {
   return (
-    <div className="p-4 bg-white shadow rounded-lg mb-6">
-      <h2 className="text-xl font-bold mb-4 text-gray-800">Select a Line</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div>
+      <h2 className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-4 border-b-2 border-blue-700 pb-2">Choose a Line</h2>
+      <div className="grid grid-cols-4 gap-3">
         {CTA_ROUTES.map((route) => (
           <button
             key={route.id}
             onClick={() => onSelect(route)}
             className={`
-              ${route.color} ${route.textColor} 
-              p-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-transform hover:scale-105
-              ${selectedRoute?.id === route.id ? 'ring-4 ring-offset-2 ring-gray-400' : ''}
+              ${route.color} ${route.textColor}
+              px-4 py-3 rounded font-bold text-xs uppercase transition-all shadow-sm hover:shadow-md
+              ${selectedRoute?.id === route.id ? 'ring-2 ring-offset-2 ring-blue-700' : ''}
             `}
           >
-            {route.name}
+            {route.name.split(' ')[0]}
           </button>
         ))}
       </div>
