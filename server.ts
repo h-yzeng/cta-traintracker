@@ -8,7 +8,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const CTA_BASE_URL = 'https://lapi.transitchicago.com/api/1.0';
+const CTA_BASE_URL = 'https://lapi.transitchicago.com/api/1.0'; 
 const API_KEY = process.env.CTA_API_KEY;
 
 app.use(cors());
@@ -26,7 +26,7 @@ const checkKey = (_req: Request, res: Response, next: NextFunction) => {
 app.get('/api/arrivals/:mapId', checkKey, async (req: Request, res: Response) => {
   try {
     const { mapId } = req.params;
-    console.log(`\n🔍 Fetching Arrivals for MapID: ${mapId}`);
+    console.log(`✅ [200] GET /api/arrivals/${mapId}`);
 
     const response = await axios.get(`${CTA_BASE_URL}/ttarrivals.aspx`, {
       params: {
@@ -36,17 +36,10 @@ app.get('/api/arrivals/:mapId', checkKey, async (req: Request, res: Response) =>
       }
     });
 
-    console.log('CTA Response Status:', response.status);
-    if (!response.data.ctatt?.eta) {
-         console.log('⚠️  CTA Returned No Arrivals or Error:', JSON.stringify(response.data, null, 2));
-    } else {
-         console.log('✅  CTA Returned Data');
-    }
-
     res.json(response.data);
   } catch (error) {
     const errorMessage = (error as Error).message;
-    console.error('❌ Request Failed:', errorMessage);
+    console.error(`❌ [500] Error fetching arrivals for ${req.params.mapId}: ${errorMessage}`);
     res.status(500).json({ error: 'Failed to fetch arrivals', details: errorMessage });
   }
 });
@@ -54,7 +47,8 @@ app.get('/api/arrivals/:mapId', checkKey, async (req: Request, res: Response) =>
 app.get('/api/positions/:route', checkKey, async (req: Request, res: Response) => {
   try {
     const { route } = req.params;
-    console.log(`\n🔍 Fetching Positions for Route: ${route}`);
+    
+    console.log(`✅ [200] GET /api/positions/${route}`);
 
     const response = await axios.get(`${CTA_BASE_URL}/ttpositions.aspx`, {
       params: {
@@ -64,16 +58,10 @@ app.get('/api/positions/:route', checkKey, async (req: Request, res: Response) =
       }
     });
     
-    if (!response.data.ctatt?.route) {
-        console.log('⚠️  CTA Returned No Positions or Error:', JSON.stringify(response.data, null, 2));
-    } else {
-        console.log('✅  CTA Returned Data');
-    }
-
     res.json(response.data);
   } catch (error) {
     const errorMessage = (error as Error).message;
-    console.error('❌ Request Failed:', errorMessage);
+    console.error(`❌ [500] Error fetching positions for ${req.params.route}: ${errorMessage}`);
     res.status(500).json({ error: 'Failed to fetch positions', details: errorMessage });
   }
 });
