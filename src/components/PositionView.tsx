@@ -84,7 +84,7 @@ const PositionsView: React.FC<Props> = ({ route }) => {
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-6 max-w-6xl mx-auto">
+      <div className="bg-red-950 border border-red-800 text-red-200 px-4 py-3 rounded-lg mt-6 max-w-6xl mx-auto">
         <p className="font-bold">Error</p>
         <p className="text-sm">{error}</p>
       </div>
@@ -95,85 +95,66 @@ const PositionsView: React.FC<Props> = ({ route }) => {
   const destinations = Object.keys(grouped);
 
   return (
-    <div className="mt-6 max-w-6xl mx-auto">
-      <div className="bg-white p-4 md:p-6 rounded-xl shadow">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-4">
-          <div>
-            <h3 className="text-lg font-bold text-slate-900">Live Positions</h3>
-            <p className="text-sm text-slate-500">Currently active trains on the {route.name}</p>
-          </div>
-          <button
-            onClick={fetchPositions}
-            disabled={loading}
-            className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Refreshing...' : 'Refresh'}
-          </button>
+    <div className="w-full">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-sm font-bold text-blue-700">Live Trains</h3>
+          <p className="text-xs text-slate-600 mt-1">{route.name}</p>
         </div>
+        <button
+          onClick={fetchPositions}
+          disabled={loading}
+          className="px-3 py-1.5 rounded text-xs font-medium border border-slate-300 hover:border-blue-500 text-slate-600 hover:text-blue-700 disabled:opacity-50 transition-colors"
+        >
+          {loading ? 'Loading...' : 'Refresh'}
+        </button>
+      </div>
 
-        {loading && positions.length === 0 && (
-          <div className="text-center py-8 text-slate-500">Loading train locations...</div>
-        )}
+      {loading && positions.length === 0 && (
+        <div className="text-center py-8 text-slate-500 text-sm">Loading...</div>
+      )}
 
-        {positions.length === 0 && !loading && (
-          <div className="text-center py-8 text-slate-500 italic">
-            No trains currently active on the {route.name}.
-          </div>
-        )}
+      {positions.length === 0 && !loading && (
+        <div className="text-center py-12 text-slate-500 text-sm">No active trains</div>
+      )}
 
-        {positions.length > 0 && (
-          <div className="space-y-6">
-            {destinations.map(dest => (
-              <div key={dest} className="border border-slate-200 rounded-xl overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-3 bg-slate-50 border-b border-slate-200">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-800">
-                      Direction: <span className="font-bold">{dest}</span>
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      {grouped[dest].length} active {grouped[dest].length === 1 ? 'train' : 'trains'}
-                    </p>
-                  </div>
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${route.color} ${route.textColor}`}
+      {positions.length > 0 && (
+        <div className="space-y-6">
+          {destinations.map(dest => (
+            <div key={dest}>
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-xs font-bold text-blue-700 uppercase tracking-wide border-b-2 border-blue-700 pb-1">{dest}</h4>
+                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${route.color} ${route.textColor}`}>
+                  {grouped[dest].length}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {grouped[dest].map((train, index) => (
+                  <div
+                    key={`${dest}-${train.rn}-${index}`}
+                    className="border border-slate-200 rounded p-3 hover:border-blue-400 hover:bg-blue-50 transition-colors shadow-sm"
                   >
-                    {route.name}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 px-4 py-4">
-                  {grouped[dest].map((train, index) => (
-                    <div
-                      key={`${dest}-${train.rn}-${index}`}
-                      className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 shadow-sm flex flex-col gap-1"
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
-                          Train
-                        </span>
-                        <span className="text-base font-semibold text-slate-900">
-                          {train.rn}
-                        </span>
+                    <div className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-2">
+                      Train {train.rn}
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div>
+                        <div className="text-slate-500">Next</div>
+                        <div className="text-slate-700 font-medium">{train.nextStaNm || '—'}</div>
                       </div>
-                      <div className="text-sm text-slate-700">
-                        <span className="font-medium">Next Stop:</span>{' '}
-                        {train.nextStaNm || 'Unknown'}
-                      </div>
-                      <div className="text-sm text-slate-700">
-                        <span className="font-medium">Destination:</span>{' '}
-                        {train.destNm || 'Unknown'}
-                      </div>
-                      <div className="mt-2 text-xs text-slate-500">
-                        Lat {train.lat}, Lon {train.lon}
+                      <div>
+                        <div className="text-slate-500">Destination</div>
+                        <div className="text-slate-700 font-medium">{train.destNm || '—'}</div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

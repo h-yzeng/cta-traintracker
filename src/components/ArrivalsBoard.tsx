@@ -108,95 +108,77 @@ const ArrivalsBoard: React.FC = () => {
   const destinationNames = Object.keys(groupedArrivals);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4">
-      <div className="bg-white shadow rounded-lg p-4">
-        <h2 className="text-xl font-bold mb-4 text-gray-800">Station Arrivals</h2>
-
+    <div className="w-full">
+      <div className="mb-8">
+        <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-3">
+          Station
+        </label>
         <select
           value={selectedStation}
           onChange={(e) => setSelectedStation(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded mb-4 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded text-slate-900 text-sm focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700"
           title="Station Selector"
         >
           {POPULAR_STATIONS.map(st => (
             <option key={st.mapId} value={st.mapId}>{st.name}</option>
           ))}
         </select>
-
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-            <p className="font-bold">API Error</p>
-            <p className="text-sm">{error}</p>
-          </div>
-        )}
-
-        {loading && <div className="text-center py-4">Loading predictions...</div>}
-
-        {!loading && destinationNames.length === 0 && !error && (
-          <div className="text-center py-4 text-gray-500 italic">
-            No scheduled arrivals in the next hour for this station.
-          </div>
-        )}
-
-        {!loading && !error && (
-          <div className="grid gap-6 lg:grid-cols-2">
-            {destinationNames.map(destName => (
-              <div key={destName} className="border border-gray-200 rounded-lg overflow-hidden">
-                <h3 className="text-lg font-semibold bg-blue-50 text-blue-800 p-3 flex justify-between items-center">
-                  <span>{destName} Bound</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293a1 1 0 00-1.414-1.414L10 10.586 7.707 8.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3z" clipRule="evenodd" />
-                  </svg>
-                </h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase w-1/4">Line</th>
-                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase w-1/2">Next Stop Name</th>
-                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase w-1/4">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {groupedArrivals[destName].map((arr, idx) => {
-                        const routeDetails = getRouteDetails(arr.rt);
-                        return (
-                          <tr key={idx} className="hover:bg-gray-50">
-                            <td className="px-3 py-3 whitespace-nowrap">
-                              <span className={`px-2 py-1 text-xs font-bold rounded shadow-sm ${routeDetails.colorClass}`}>
-                                {routeDetails.name}
-                              </span>
-                            </td>
-                            <td className="px-3 py-3 text-sm text-gray-900">
-                              <div className="font-semibold">
-                                {arr.staNm || arr.stpDe || 'Unknown station'}
-                              </div>
-                              {arr.stpDe && arr.stpDe !== arr.staNm && (
-                                <div className="text-xs text-gray-500">
-                                  {arr.stpDe}
-                                </div>
-                              )}
-                            </td>
-                            <td className="px-3 py-3 text-sm font-bold">
-                              {arr.isApp === '1' ? (
-                                <span className="text-green-600 font-extrabold">Approaching</span>
-                              ) : arr.isDly === '1' ? (
-                                <span className="text-red-500 font-extrabold">Delayed</span>
-                              ) : (
-                                <span className="text-gray-900">{formatTime(arr.arrT)}</span>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
+
+      {error && (
+        <div className="bg-red-50 border border-red-300 text-red-800 px-4 py-3 rounded mb-6 text-sm">
+          <p className="font-semibold">Error: {error}</p>
+        </div>
+      )}
+
+      {loading && <div className="text-center py-8 text-slate-500 text-sm">Loading...</div>}
+
+      {!loading && destinationNames.length === 0 && !error && (
+        <div className="text-center py-12 text-slate-500 text-sm">
+          No arrivals available
+        </div>
+      )}
+
+      {!loading && !error && (
+        <div className="space-y-6">
+          {destinationNames.map(destName => (
+            <div key={destName}>
+              <h3 className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-3 border-b-2 border-blue-700 pb-2">
+                {destName}
+              </h3>
+              <div className="space-y-1.5">
+                {groupedArrivals[destName].map((arr, idx) => {
+                  const routeDetails = getRouteDetails(arr.rt);
+                  return (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between p-3 rounded border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <span className={`px-2 py-0.5 text-xs font-bold rounded flex-shrink-0 ${routeDetails.colorClass}`}>
+                          {routeDetails.name}
+                        </span>
+                        <span className="text-sm text-slate-700 truncate">
+                          {arr.staNm || arr.stpDe || 'Unknown'}
+                        </span>
+                      </div>
+                      <div className="text-right ml-4 flex-shrink-0">
+                        {arr.isApp === '1' ? (
+                          <span className="text-xs font-bold text-green-600">Arriving</span>
+                        ) : arr.isDly === '1' ? (
+                          <span className="text-xs font-bold text-red-600">Delayed</span>
+                        ) : (
+                          <span className="text-xs font-medium text-slate-600">{formatTime(arr.arrT)}</span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

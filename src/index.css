@@ -1,1 +1,49 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-gray-950 text-gray-50;
+    font-feature-settings: "kern" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* Minimal card style */
+  .card-minimal {
+    @apply border border-gray-800 rounded-lg p-4 hover:border-gray-700 transition-colors;
+  }
+
+  /* Minimal button style */
+  .btn-minimal {
+    @apply px-4 py-2 rounded-lg text-sm font-medium border border-gray-800 bg-gray-900 text-gray-300 hover:border-gray-700 hover:text-gray-200 transition-colors duration-200;
+  }
+
+  /* Tab underline indicator */
+  .tab-indicator {
+    @apply absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 transition-all duration-300;
+  }
+}
+
+@layer utilities {
+  .smooth-transition {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .text-subtle {
+    @apply text-gray-500;
+  }
+
+  .text-muted {
+    @apply text-gray-600;
+  }
+
+  .divider-subtle {
+    @apply border-gray-800;
+  }
+}
