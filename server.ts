@@ -14,7 +14,7 @@ const API_KEY = process.env.CTA_API_KEY;
 app.use(cors());
 app.use(express.json());
 
-const checkKey = (req: Request, res: Response, next: NextFunction) => {
+const checkKey = (_req: Request, res: Response, next: NextFunction) => {
   if (!API_KEY) {
     console.error('❌ ERROR: CTA_API_KEY is missing from .env file');
     res.status(500).json({ error: 'Server missing CTA API Key' });
