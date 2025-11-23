@@ -12,9 +12,18 @@ export const CTA_ROUTES: RouteInfo[] = [
 ];
 
 export const POPULAR_STATIONS = [
+  { name: '35th-Bronzeville-IIT (Green)', mapId: '41120' },
+  { name: 'Sox-35th (Red)', mapId: '40190' },
+  { name: 'Cermak-Chinatown (Red)', mapId: '41000' },
+  { name: 'Cermak-McCormick Place (Green)', mapId: '41690' },
+  { name: 'Indiana (Green)', mapId: '40300' },
+  { name: '43rd (Green)', mapId: '41270' },
+  { name: '47th (Green)', mapId: '41080' },
+  { name: '47th (Red)', mapId: '41230' },
+
   { name: 'Lake (Red)', mapId: '41660' },
   { name: 'O\'Hare (Blue)', mapId: '40890' },
   { name: 'Clark/Lake (All)', mapId: '40380' },
   { name: 'Fullerton (Red/Brn/Pur)', mapId: '41220' },
-  { name: 'Roosevelt (Red/Org/Grn)', mapId: '41400' }
+  { name: 'Roosevelt (Red/Org/Grn)', mapId: '41400' },
 ];

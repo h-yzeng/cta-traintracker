@@ -1,5 +1,5 @@
 import express from 'express';
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express'; 
 import cors from 'cors';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -14,7 +14,7 @@ const API_KEY = process.env.CTA_API_KEY;
 app.use(cors());
 app.use(express.json());
 
-const checkKey = (_req: Request, res: Response, next: NextFunction) => {
+const checkKey = (req: Request, res: Response, next: NextFunction) => {
   if (!API_KEY) {
     console.error('❌ ERROR: CTA_API_KEY is missing from .env file');
     res.status(500).json({ error: 'Server missing CTA API Key' });
