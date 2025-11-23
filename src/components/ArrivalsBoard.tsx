@@ -3,7 +3,7 @@ import { POPULAR_STATIONS, CTA_ROUTES } from '../constants';
 import type { TrainArrival } from '../types';
 
 const FAVORITE_STATION_KEY = 'cta_fav_station';
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 const REFRESH_INTERVAL_MS = 30000;
 
 const formatTime = (isoString: string | undefined) => {

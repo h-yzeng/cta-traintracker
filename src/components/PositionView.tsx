@@ -5,7 +5,7 @@ interface Props {
   route: RouteInfo;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 
 const groupPositionsByDestination = (positions: TrainPosition[]): Record<string, TrainPosition[]> => {
   const grouped: Record<string, TrainPosition[]> = {};
